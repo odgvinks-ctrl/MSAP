@@ -18,7 +18,7 @@ export default defineConfig([
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
     rules: {
-      'react-refresh/only-export-components': ['error', { allowExportNames: ['useAuth'] }],
+      'react-refresh/only-export-components': ['error', { allowExportNames: ['useAuth', 'useLangue'] }],
     },
   },
 ])

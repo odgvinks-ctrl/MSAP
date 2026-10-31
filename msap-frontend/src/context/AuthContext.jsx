@@ -6,7 +6,7 @@ const CLE = "msap-admin";
 
 function lireUtilisateur() {
   try {
-    const stocke = JSON.parse(localStorage.getItem(CLE));
+    const stocke = JSON.parse(sessionStorage.getItem(CLE));
     return stocke && sessionActive() ? stocke : null;
   } catch {
     return null;
@@ -16,9 +16,9 @@ function lireUtilisateur() {
 function stocker(utilisateur) {
   try {
     if (utilisateur) {
-      localStorage.setItem(CLE, JSON.stringify(utilisateur));
+      sessionStorage.setItem(CLE, JSON.stringify(utilisateur));
     } else {
-      localStorage.removeItem(CLE);
+      sessionStorage.removeItem(CLE);
     }
   } catch {
     return;
@@ -46,7 +46,14 @@ export function AuthProvider({ children }) {
     }
 
     const actualiser = () => chargerMoi().then(appliquer, () => {});
-    const expirer = () => appliquer(null);
+    const expirer = () => {
+      try {
+        sessionStorage.setItem("msap-session-fermee", "1");
+      } catch {
+        return appliquer(null);
+      }
+      appliquer(null);
+    };
     actualiser();
     window.addEventListener("focus", actualiser);
     window.addEventListener("msap-session-expiree", expirer);
