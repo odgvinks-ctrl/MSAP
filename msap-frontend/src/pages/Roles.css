@@ -1,0 +1,72 @@
+.roles-cartes {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.roles-carte {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+}
+
+.roles-carte strong {
+  font-size: 14px;
+}
+
+.roles-nombre {
+  font-size: 26px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.roles-tableau th:not(:first-child),
+.roles-tableau td:not(:first-child) {
+  width: 160px;
+  text-align: center;
+}
+
+.roles-domaine td {
+  padding-top: 20px;
+  background: var(--card);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--or);
+}
+
+.roles-interdit td {
+  background: rgba(248, 229, 227, 0.4);
+}
+
+.roles-oui {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--succes-clair);
+  color: var(--succes);
+}
+
+.roles-non {
+  color: rgba(107, 112, 128, 0.5);
+}
+
+.roles-portee {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--bleu-clair);
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--bleu);
+}
+
+@media (max-width: 960px) {
+  .roles-cartes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
