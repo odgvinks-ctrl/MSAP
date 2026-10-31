@@ -1,0 +1,14 @@
+:root {
+  --bg: #F7F6F2;
+  --bg-alt: #EFEEEA;
+  --card: #FFFFFF;
+  --text: #14171F;
+  --muted: #6B7080;
+  --accent: #0B1B36;
+  --bleu: #2457D6;
+  --or: #C29B3B;
+  --succes: #1F8A5B;
+  --alerte: #B83232;
+  --restreint: #A86C14;
+  --ligne: rgba(11, 27, 54, 0.1);
+}
