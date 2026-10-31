@@ -15,10 +15,21 @@ export default function Connexion() {
   const [code, setCode] = useState("");
   const [erreur, setErreur] = useState("");
   const [chargement, setChargement] = useState(false);
+  const [sessionFermee] = useState(() => {
+    try {
+      const fermee = sessionStorage.getItem("msap-session-fermee") === "1";
+      sessionStorage.removeItem("msap-session-fermee");
+      return fermee;
+    } catch {
+      return false;
+    }
+  });
   const { user, enregistrer } = useAuth();
   const navigate = useNavigate();
 
-  if (user) return <Navigate to="/" replace />;
+  const accueil = (compte) => (["super_admin", "admin_ministeriel"].includes(compte.role) ? "/" : "/messages");
+
+  if (user) return <Navigate to={accueil(user)} replace />;
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -44,9 +55,9 @@ export default function Connexion() {
     e.preventDefault();
     setChargement(true);
     try {
-      const admin = await verifierCode(jetonTemporaire, code);
-      enregistrer(admin);
-      navigate("/");
+      const compte = await verifierCode(jetonTemporaire, code);
+      enregistrer(compte);
+      navigate(accueil(compte));
     } catch (err) {
       setErreur(err.message);
     } finally {
@@ -81,8 +92,8 @@ export default function Connexion() {
           <span className="auth-trait" />
           <h1>Messagerie Souveraine de l'Administration Publique</h1>
           <p>
-            La communication institutionnelle, en toute confiance. Ce portail permet aux administrateurs
-            d'enrôler les agents, de révoquer leurs accès et de suivre la sécurité de la plateforme.
+            La communication institutionnelle, en toute confiance. Des échanges chiffrés de bout en bout, hébergés sur
+            l'infrastructure de l'État, réservés aux agents enrôlés.
           </p>
           <div className="auth-atouts">
             {atouts.map((a) => {
@@ -104,9 +115,16 @@ export default function Connexion() {
       <section className="auth-zone">
         {etape === "identifiant" ? (
           <form className="auth-carte" onSubmit={handleSubmit}>
-            <span className="label">Portail d'administration</span>
+            <span className="label">Agents de l'administration</span>
             <h2>Connexion sécurisée</h2>
-            <p className="auth-sous-titre">Réservé aux administrateurs enrôlés. Aucun compte ne peut être créé ici.</p>
+            <p className="auth-sous-titre">Réservé aux agents enrôlés. Aucun compte ne peut être créé ici.</p>
+
+            {sessionFermee && (
+              <div className="auth-erreur">
+                <ShieldX size={16} />
+                <span>Votre session a été fermée. Si vos accès ont été révoqués, contactez votre administrateur ministériel.</span>
+              </div>
+            )}
 
             <label className="champ">
               Adresse professionnelle
