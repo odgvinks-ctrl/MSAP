@@ -1,0 +1,218 @@
+.enrole-grille {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 16px;
+  align-items: start;
+}
+
+.enrole-blocs {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.enrole-bloc {
+  padding: 20px;
+}
+
+.enrole-bloc h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  font-size: 15px;
+}
+
+.enrole-bloc h2 span {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--accent);
+  font-size: 12px;
+  color: #fff;
+}
+
+.enrole-champs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.enrole-roles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.enrole-role {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px;
+  background: var(--card);
+  border: 1px solid var(--ligne);
+  border-radius: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.enrole-role strong {
+  font-size: 14px;
+  color: var(--text);
+}
+
+.enrole-role span {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.enrole-role.actif {
+  background: var(--bg);
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.enrole-recap {
+  position: sticky;
+  top: 84px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+}
+
+.enrole-recap h2 {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.enrole-recap dl {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.enrole-recap dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.enrole-recap dt {
+  color: var(--muted);
+}
+
+.enrole-recap dd {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.enrole-garanties {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--ligne);
+  font-size: 13px;
+}
+
+.enrole-garanties li {
+  display: flex;
+  gap: 8px;
+}
+
+.enrole-garanties svg {
+  flex-shrink: 0;
+  color: var(--succes);
+}
+
+.enrole-bouton {
+  width: 100%;
+  padding: 13px;
+  font-size: 15px;
+}
+
+.enrole {
+  max-width: 560px;
+}
+
+.enrole-carte {
+  overflow: hidden;
+}
+
+.enrole-haut {
+  padding: 32px 24px;
+  background: var(--accent);
+  text-align: center;
+  color: #fff;
+}
+
+.enrole-coche {
+  display: inline-grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--succes);
+}
+
+.enrole-haut h1 {
+  margin-top: 14px;
+  font-size: 22px;
+}
+
+.enrole-haut p {
+  margin-top: 4px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.enrole-corps {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px;
+}
+
+.enrole-code {
+  display: flex;
+  gap: 8px;
+}
+
+.enrole-code span {
+  flex: 1;
+  padding: 12px;
+  border: 2px dashed rgba(194, 155, 59, 0.5);
+  border-radius: 12px;
+  background: var(--or-clair);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-align: center;
+  color: var(--accent);
+}
+
+@media (max-width: 960px) {
+  .enrole-grille {
+    grid-template-columns: 1fr;
+  }
+
+  .enrole-recap {
+    position: static;
+  }
+}
+
+@media (max-width: 600px) {
+  .enrole-champs,
+  .enrole-roles {
+    grid-template-columns: 1fr;
+  }
+}
