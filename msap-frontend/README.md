@@ -1,6 +1,11 @@
-# MSAP · Portail d'administration
+# MSAP · Frontend
 
-Frontend du portail d'administration de MSAP (Messagerie Souveraine de l'Administration Publique). La messagerie des agents est Element Web, habillé par `../element/config.json`.
+Frontend de MSAP (Messagerie Souveraine de l'Administration Publique). Une seule application React contient deux espaces :
+
+- **la messagerie des agents** (`/messages`, `/groupes`, `/annuaire`, `/fichiers`, `/enregistres`, `/securite`, `/parametres`) : conversations, groupes institutionnels, messages classifiés (Standard, Diffusion restreinte, Confidentiel), pièces jointes, messages vocaux, centre de sécurité avec bouton d'urgence ;
+- **le portail d'administration** (`/`, `/agents`, `/enrolement`, `/revocations`, `/classifications`, `/ministeres`, `/roles`, `/audit`) : réservé aux rôles `super_admin` et `admin_ministeriel`.
+
+Après la connexion, un agent arrive sur `/messages`, un administrateur sur `/`. Un administrateur passe d'un espace à l'autre par le menu. Element Web, habillé par `../element/config.json`, reste disponible comme client Matrix de secours.
 
 ## Lancer le projet
 
@@ -23,9 +28,14 @@ Mot de passe `msap2026`, code de second facteur `123456`.
 | --- | --- | --- |
 | Super administrateur | i.sawadogo@mtd.msap.demo | accès complet |
 | Administratrice ministérielle | f.sankara@men.msap.demo | limitée au MEN |
-| Agent sans droits | a.ouedraogo@mtd.msap.demo | refusé |
+| Agente | a.ouedraogo@mtd.msap.demo | messagerie, refusée sur le portail |
+| Agent à révoquer | h.diallo@mfp.msap.demo | messagerie, sert à montrer la révocation en direct |
 | Compte révoqué | a.barry@mae.msap.demo | refusé |
 | Intrus non enrôlé | invite.externe@gmail.com | refusé et journalisé |
+
+## Démonstration de la révocation en direct
+
+La session est gardée par onglet. Ouvrir un onglet connecté avec `h.diallo@mfp.msap.demo` (messagerie), un autre avec `i.sawadogo@mtd.msap.demo` (portail). Révoquer Hamidou Diallo depuis le portail : en quelques secondes son onglet est déconnecté, et les autres membres de ses groupes voient le message « accès révoqué · clés du groupe renouvelées ».
 
 ## Technologies et licences
 

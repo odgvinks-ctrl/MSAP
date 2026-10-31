@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Check, Loader2, ShieldOff, ShieldX, X } from "lucide-react";
 import AvatarAgent from "./AvatarAgent.jsx";
 import { etapesRevocation, revoquerAgent } from "../api/revocations.js";
+import "./Fenetre.css";
 import "./FenetreRevocation.css";
 
 const motifs = [

@@ -57,3 +57,35 @@ export function duree(minutes) {
   const jours = Math.round(minutes / 1440);
   return `${jours} jour${jours > 1 ? "s" : ""}`;
 }
+
+function memeJour(a, b) {
+  return a.toDateString() === b.toDateString();
+}
+
+export function horodatage(iso) {
+  if (!iso) return "";
+  const d = new Date(iso);
+  const maintenant = new Date();
+  if (memeJour(d, maintenant)) return heure(iso);
+  if (memeJour(d, new Date(maintenant.getTime() - 86400000))) return "Hier";
+  if (maintenant.getTime() - d.getTime() < 6 * 86400000) return d.toLocaleDateString("fr-FR", { weekday: "long" });
+  return d.toLocaleDateString("fr-FR", { day: "numeric", month: "short" });
+}
+
+export function separateurJour(iso) {
+  const d = new Date(iso);
+  const maintenant = new Date();
+  if (memeJour(d, maintenant)) return "Aujourd'hui";
+  if (memeJour(d, new Date(maintenant.getTime() - 86400000))) return "Hier";
+  return d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
+}
+
+export function restant(iso, maintenant) {
+  const s = Math.max(0, Math.round((new Date(iso).getTime() - maintenant) / 1000));
+  if (s < 60) return `${s} s`;
+  const m = Math.floor(s / 60);
+  if (m < 60) return `${m} min ${String(s % 60).padStart(2, "0")} s`;
+  const h = Math.floor(m / 60);
+  if (h < 48) return `${h} h ${String(m % 60).padStart(2, "0")}`;
+  return `${Math.floor(h / 24)} jours`;
+}

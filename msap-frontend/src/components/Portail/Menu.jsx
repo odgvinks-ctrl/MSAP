@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Building2, KeyRound, LayoutDashboard, LogOut, ScrollText, ShieldCheck, ShieldOff, UserPlus, Users, X } from "lucide-react";
+import { Building2, KeyRound, LayoutDashboard, LogOut, MessageSquareText, ScrollText, ShieldCheck, ShieldOff, UserPlus, Users, X } from "lucide-react";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { nomDe, roles } from "../../data/roles.js";
 import AvatarAgent from "../AvatarAgent.jsx";
@@ -13,7 +13,10 @@ export default function Menu({ isOpen, onFermer }) {
   const sections = [
     {
       titre: "Pilotage",
-      liens: [{ label: "Tableau de bord", to: "/", icone: LayoutDashboard }],
+      liens: [
+        { label: "Tableau de bord", to: "/", icone: LayoutDashboard },
+        { label: "Ouvrir la messagerie", to: "/messages", icone: MessageSquareText },
+      ],
     },
     {
       titre: "Identités",

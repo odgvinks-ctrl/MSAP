@@ -1,0 +1,28 @@
+.msg-cadre {
+  display: flex;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.msg-contenu {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .msg-contenu {
+    padding-bottom: 60px;
+  }
+
+  .msg-contenu:has(.chat.ouvert) {
+    padding-bottom: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .msg-cadre:has(.chat.ouvert) .msg-onglets {
+    display: none;
+  }
+}

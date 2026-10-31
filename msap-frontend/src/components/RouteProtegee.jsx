@@ -9,7 +9,7 @@ export default function RouteProtegee({ children, roles }) {
   }
 
   if (roles && !roles.includes(user.role)) {
-    return <Navigate to="/" replace />;
+    return <Navigate to={["super_admin", "admin_ministeriel"].includes(user.role) ? "/" : "/messages"} replace />;
   }
 
   return children;

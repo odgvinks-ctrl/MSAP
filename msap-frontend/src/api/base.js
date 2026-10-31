@@ -1,4 +1,6 @@
-const CLE = "msap-base-v1";
+import { graineMessagerie, noterConnexion, retirerDesSalons, routeMessagerie, salonsDe } from "./baseMessagerie.js";
+
+const CLE = "msap-base-v2";
 const CODE_DEMO = "123456";
 const IP_ADMIN = "10.12.2.11";
 
@@ -105,7 +107,7 @@ function graine() {
       enrole_le: joursAvant(jours, 8 + (i % 8)),
       derniere_connexion: derniere === null ? null : ilYA(derniere),
       appareils: statut === "actif" ? 1 + (i % 3) : 0,
-      salons: statut === "actif" ? 2 + (i % 4) : 0,
+      presence: statut !== "actif" ? "hors_ligne" : derniere < 30 ? "disponible" : derniere < 300 ? ["occupe", "absent"][i % 2] : "hors_ligne",
     };
   });
 
@@ -148,26 +150,24 @@ function graine() {
     fichiers: [212, 248, 231, 276, 190, 22, 9][i],
   }));
 
-  return { ministeres, agents, audit, revocations, classifications, activite, compteur: 200 };
+  return { ministeres, agents, audit, revocations, classifications, activite, compteur: 200, ...graineMessagerie() };
 }
 
-const comptes = {
-  "i.sawadogo@mtd.msap.demo": "a02",
-  "f.sankara@men.msap.demo": "a19",
-  "a.ouedraogo@mtd.msap.demo": "a01",
-  "a.barry@mae.msap.demo": "a29",
-};
 const MOT_DE_PASSE = "msap2026";
 
 let memoire = null;
 
 function lire() {
-  if (memoire) return memoire;
   try {
-    memoire = JSON.parse(localStorage.getItem(CLE)) || graine();
+    const stocke = JSON.parse(localStorage.getItem(CLE));
+    if (stocke) {
+      memoire = stocke;
+      return memoire;
+    }
   } catch {
-    memoire = graine();
+    return memoire || (memoire = graine());
   }
+  if (!memoire) memoire = graine();
   return memoire;
 }
 
@@ -202,13 +202,24 @@ function journal(base, auteurId, action, cibleId, details, resultat = "succes", 
   base.audit.unshift({ id: `l${base.compteur}`, date: new Date().toISOString(), auteur_id: auteurId, action, cible_id: cibleId, resultat, details, ip });
 }
 
-function adminConnecte(base, jeton) {
+function sessionConnectee(base, jeton) {
   const id = jeton && jeton.startsWith("demo-session-") ? jeton.replace("demo-session-", "") : null;
-  const admin = base.agents.find((a) => a.id === id);
-  if (!admin || admin.statut !== "actif" || !["super_admin", "admin_ministeriel"].includes(admin.role)) {
-    throw erreur(401, "Votre session a expiré. Reconnectez-vous.");
+  const agent = base.agents.find((a) => a.id === id);
+  if (!agent || agent.statut !== "actif") {
+    throw erreur(401, "Votre session a été fermée. Reconnectez-vous.");
   }
-  return admin;
+  return agent;
+}
+
+function adminConnecte(agent) {
+  if (!["super_admin", "admin_ministeriel"].includes(agent.role)) {
+    throw erreur(403, "Ce compte n'a pas les droits d'administration.");
+  }
+  return agent;
+}
+
+function avecSalons(base, agent) {
+  return { ...agent, salons: salonsDe(base, agent.id) };
 }
 
 function trouverAgent(base, id) {
@@ -231,8 +242,7 @@ export async function appelDemo(chemin, { methode = "GET", corps, jeton } = {}) 
 
   if (route === "/auth/login" && methode === "POST") {
     const email = (corps.email || "").trim().toLowerCase();
-    const agentId = comptes[email];
-    const agent = base.agents.find((a) => a.id === agentId);
+    const agent = base.agents.find((a) => a.email.toLowerCase() === email);
     if (!agent || corps.password !== MOT_DE_PASSE) {
       journal(base, agent ? agent.id : null, "connexion_rejetee", agent ? agent.id : null, agent ? "Mot de passe incorrect" : `Compte inconnu de l'annuaire : ${email || "vide"}`, "echec", "196.28.240.17");
       ecrire(base);
@@ -242,9 +252,6 @@ export async function appelDemo(chemin, { methode = "GET", corps, jeton } = {}) 
       journal(base, agent.id, "connexion_rejetee", agent.id, `Connexion refusée : compte ${agent.statut === "revoque" ? "révoqué" : "suspendu"}`, "echec", "196.28.240.17");
       ecrire(base);
       throw erreur(403, agent.statut === "revoque" ? "Les accès de ce compte ont été révoqués." : "Ce compte est suspendu.");
-    }
-    if (!["super_admin", "admin_ministeriel"].includes(agent.role)) {
-      throw erreur(403, "Ce compte n'a pas les droits d'administration. Utilisez la messagerie MSAP.");
     }
     return { jeton_temporaire: `demo-attente-${agent.id}` };
   }
@@ -259,14 +266,20 @@ export async function appelDemo(chemin, { methode = "GET", corps, jeton } = {}) 
       throw erreur(401, "Code invalide. Saisissez les 6 chiffres de votre application d'authentification.");
     }
     agent.derniere_connexion = new Date().toISOString();
-    journal(base, agent.id, "connexion", null, "Connexion au portail d'administration avec second facteur");
+    agent.presence = "disponible";
+    noterConnexion(base, agent);
+    journal(base, agent.id, "connexion", null, "Connexion avec second facteur (TOTP)");
     ecrire(base);
     return { access_token: `demo-session-${agent.id}` };
   }
 
-  const admin = adminConnecte(base, jeton);
+  const session = sessionConnectee(base, jeton);
 
-  if (route === "/auth/me") return admin;
+  if (route === "/auth/me") return session;
+
+  if (morceaux[0] === "messagerie") return routeMessagerie(base, session.id, route, methode, corps, ecrire);
+
+  const admin = adminConnecte(session);
 
   if (morceaux[0] !== "admin") throw erreur(404, "Ressource introuvable.");
   const ressource = morceaux[1];
@@ -300,7 +313,8 @@ export async function appelDemo(chemin, { methode = "GET", corps, jeton } = {}) 
 
   if (ressource === "agents") {
     if (!id && methode === "GET") {
-      return admin.role === "super_admin" ? base.agents : base.agents.filter((a) => a.ministere_id === admin.ministere_id);
+      const liste = admin.role === "super_admin" ? base.agents : base.agents.filter((a) => a.ministere_id === admin.ministere_id);
+      return liste.map((a) => avecSalons(base, a));
     }
 
     if (!id && methode === "POST") {
@@ -315,18 +329,18 @@ export async function appelDemo(chemin, { methode = "GET", corps, jeton } = {}) 
         enrole_le: new Date().toISOString(),
         derniere_connexion: null,
         appareils: 0,
-        salons: 0,
+        presence: "hors_ligne",
       };
       base.agents.unshift(agent);
       const m = base.ministeres.find((x) => x.id === agent.ministere_id);
       journal(base, admin.id, "enrolement", agent.id, `Enrôlement d'un agent du ${m ? m.sigle : ""}, activation en attente`);
       ecrire(base);
       const code = Array.from({ length: 3 }, () => Math.random().toString(36).slice(2, 6).toUpperCase()).join("-");
-      return { agent, code_activation: code, expire_dans_heures: 72 };
+      return { agent: avecSalons(base, agent), code_activation: code, expire_dans_heures: 72 };
     }
 
     const agent = trouverAgent(base, id);
-    if (!action && methode === "GET") return agent;
+    if (!action && methode === "GET") return avecSalons(base, agent);
     verifierPortee(admin, agent);
 
     if (!action && methode === "PATCH") {
@@ -334,21 +348,23 @@ export async function appelDemo(chemin, { methode = "GET", corps, jeton } = {}) 
       Object.assign(agent, corps);
       journal(base, admin.id, ancienRole !== agent.role ? "modification_role" : "modification_agent", agent.id, ancienRole !== agent.role ? `Rôle modifié : ${ancienRole} → ${agent.role}` : "Mise à jour des informations professionnelles");
       ecrire(base);
-      return agent;
+      return avecSalons(base, agent);
     }
 
     if (action === "suspension") {
+      if (agent.id === admin.id) throw erreur(403, "Vous ne pouvez pas suspendre votre propre compte.");
       agent.statut = "suspendu";
+      agent.presence = "hors_ligne";
       journal(base, admin.id, "suspension", agent.id, corps?.motif || "Suspension temporaire des accès");
       ecrire(base);
-      return agent;
+      return avecSalons(base, agent);
     }
 
     if (action === "reactivation") {
       agent.statut = "actif";
       journal(base, admin.id, "reactivation", agent.id, "Réactivation du compte");
       ecrire(base);
-      return agent;
+      return avecSalons(base, agent);
     }
 
     if (action === "activation") {
@@ -360,11 +376,10 @@ export async function appelDemo(chemin, { methode = "GET", corps, jeton } = {}) 
     if (action === "revocation") {
       if (agent.statut === "revoque") throw erreur(409, "Cet agent est déjà révoqué.");
       if (agent.id === admin.id) throw erreur(403, "Vous ne pouvez pas révoquer votre propre compte.");
-      const appareils = Math.max(1, agent.appareils);
-      const salons = agent.salons;
       agent.statut = "revoque";
+      agent.presence = "hors_ligne";
+      const { appareils, salons } = retirerDesSalons(base, agent, admin.id);
       agent.appareils = 0;
-      agent.salons = 0;
       base.compteur += 1;
       const revocation = {
         id: `r${base.compteur}`,
@@ -387,9 +402,10 @@ export async function appelDemo(chemin, { methode = "GET", corps, jeton } = {}) 
 }
 
 export const comptesDemo = [
+  { role: "Agente (messagerie)", email: "a.ouedraogo@mtd.msap.demo" },
+  { role: "Agent à révoquer en direct", email: "h.diallo@mfp.msap.demo" },
   { role: "Super administrateur", email: "i.sawadogo@mtd.msap.demo" },
   { role: "Administratrice ministérielle (MEN)", email: "f.sankara@men.msap.demo" },
-  { role: "Agent sans droits d'administration", email: "a.ouedraogo@mtd.msap.demo" },
   { role: "Compte révoqué", email: "a.barry@mae.msap.demo" },
   { role: "Intrus non enrôlé", email: "invite.externe@gmail.com" },
 ];
