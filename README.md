@@ -47,6 +47,9 @@ Le frontend ne parle qu'à l'API (routes `/auth`, `/agents`, `/messagerie`…). 
 | React | MIT | https://react.dev |
 | React Router | MIT | https://reactrouter.com |
 | Vite | MIT | https://vite.dev |
+| Vitest | MIT | https://vitest.dev |
+| Testing Library | MIT | https://testing-library.com |
+| jsdom | MIT | https://github.com/jsdom/jsdom |
 | Lucide React | ISC | https://lucide.dev |
 | Recharts | MIT | https://recharts.org |
 | Inter, JetBrains Mono | OFL-1.1 | https://fontsource.org |
@@ -74,6 +77,15 @@ cd msap-frontend
 npm install
 npm run dev
 ```
+
+Tests automatisés de sécurité (27 tests, Vitest) :
+
+```bash
+cd msap-frontend
+npm test
+```
+
+Ils vérifient : refus des intrus non enrôlés, des comptes révoqués ou suspendus et des mauvais mots de passe ; second facteur obligatoire ; refus des requêtes sans jeton ou avec un jeton inventé ; portail interdit aux simples agents ; administrateur ministériel limité à son ministère ; règles de classification réservées au super administrateur ; fermeture immédiate de la session d'un agent révoqué ; journalisation des refus et des révocations.
 
 Sans fichier `.env`, le frontend démarre en **mode démonstration** avec des données fictives. Pour le relier à l'API, créer `msap-frontend/.env` avec `VITE_API_URL=http://localhost:8000`.
 
