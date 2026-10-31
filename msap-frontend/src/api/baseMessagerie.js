@@ -414,7 +414,7 @@ export function routeMessagerie(base, moi, route, methode, corps, ecrire) {
       base.lectures[moi] = { ...(base.lectures[moi] || {}), [c.id]: msg.envoye_le };
       ecrire(base);
       setTimeout(() => {
-        const suivante = JSON.parse(localStorage.getItem("msap-base-v1") || "null");
+        const suivante = JSON.parse(localStorage.getItem("msap-base-v2") || "null");
         if (!suivante) return;
         const cible = suivante.messages.find((x) => x.id === msg.id);
         if (!cible) return;

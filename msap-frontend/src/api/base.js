@@ -1,6 +1,6 @@
 import { graineMessagerie, noterConnexion, retirerDesSalons, routeMessagerie, salonsDe } from "./baseMessagerie.js";
 
-const CLE = "msap-base-v1";
+const CLE = "msap-base-v2";
 const CODE_DEMO = "123456";
 const IP_ADMIN = "10.12.2.11";
 
