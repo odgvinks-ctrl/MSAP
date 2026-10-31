@@ -7,6 +7,12 @@ class Settings(BaseSettings):
     environment: str = "development"
     cors_origins_raw: str = "http://localhost:5173"
 
+    db_name: str = "msap_db"
+    db_user: str = "msap_user"
+    db_password: str
+    db_host: str = "localhost"
+    db_port: int = 5433
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_prefix="MSAP_",
