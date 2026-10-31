@@ -1,0 +1,295 @@
+.fenetre-fond {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(7, 18, 38, 0.45);
+  backdrop-filter: blur(2px);
+}
+
+.fenetre {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 560px;
+  max-height: 92vh;
+  overflow: hidden;
+  background: var(--card);
+  border-radius: 16px;
+  box-shadow: var(--ombre-haute);
+  animation: fenetre-entree 0.2s ease-out;
+}
+
+@keyframes fenetre-entree {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+.fenetre-bande {
+  height: 4px;
+  background: var(--alerte);
+}
+
+.fenetre-entete {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--ligne);
+}
+
+.fenetre-entete h2 {
+  font-size: 17px;
+}
+
+.fenetre-entete p {
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.fenetre-fermer {
+  display: grid;
+  place-items: center;
+  padding: 4px;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.fenetre-corps {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 24px;
+  overflow-y: auto;
+}
+
+.fenetre-pied {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 14px 24px;
+  border-top: 1px solid var(--ligne);
+  background: var(--bg);
+}
+
+.revocation-agent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--ligne);
+  border-radius: 12px;
+  background: var(--bg);
+}
+
+.revocation-agent div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.revocation-agent strong {
+  font-size: 15px;
+}
+
+.revocation-agent > div > span {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.revocation-titre {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.revocation-consequences {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: -6px;
+}
+
+.revocation-consequences li {
+  display: flex;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.revocation-consequences svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--alerte);
+}
+
+.revocation-avertissement {
+  padding: 12px;
+  border-radius: 10px;
+  background: var(--alerte-clair);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--alerte);
+}
+
+.revocation-texte {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.revocation-matricule {
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: var(--bg-alt);
+  font-weight: 600;
+}
+
+.revocation-saisie {
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--ligne);
+  border-radius: 10px;
+  outline: none;
+  font-size: 15px;
+}
+
+.revocation-saisie:focus {
+  border-color: var(--alerte);
+  box-shadow: 0 0 0 3px var(--alerte-clair);
+}
+
+.revocation-etapes {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  list-style: none;
+}
+
+.revocation-etapes li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.revocation-etapes li.fait {
+  background: var(--succes-clair);
+  color: var(--text);
+}
+
+.revocation-etapes li.courant {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.revocation-etapes li.echoue {
+  background: var(--alerte-clair);
+  color: var(--alerte);
+}
+
+.revocation-puce {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--bg-alt);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.revocation-etapes li.fait .revocation-puce {
+  background: var(--succes);
+  color: #fff;
+}
+
+.revocation-etapes li.courant .revocation-puce {
+  background: var(--accent);
+  color: #fff;
+}
+
+.revocation-etapes li.echoue .revocation-puce {
+  background: var(--alerte);
+  color: #fff;
+}
+
+.revocation-libelle {
+  flex: 1;
+}
+
+.revocation-systeme {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.tourne {
+  animation: tourne 0.8s linear infinite;
+}
+
+@keyframes tourne {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.revocation-bilan {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.revocation-bilan div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px;
+  border: 1px solid var(--ligne);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.revocation-bilan strong {
+  font-size: 16px;
+}
+
+.revocation-bilan span {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+@media (max-width: 600px) {
+  .fenetre-fond {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .fenetre {
+    border-radius: 16px 16px 0 0;
+  }
+
+  .revocation-systeme {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fenetre,
+  .tourne {
+    animation: none;
+  }
+}

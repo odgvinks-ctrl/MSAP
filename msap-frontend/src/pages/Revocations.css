@@ -1,0 +1,134 @@
+.revo-rapide {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  border-color: rgba(184, 50, 50, 0.25);
+}
+
+.revo-icone {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--alerte-clair);
+  color: var(--alerte);
+}
+
+.revo-rapide-corps {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  max-width: 720px;
+}
+
+.revo-rapide-corps h2 {
+  font-size: 15px;
+}
+
+.revo-rapide-corps > p {
+  margin-top: -6px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.revo-rapide .portail-recherche input:focus {
+  border-color: var(--alerte);
+  box-shadow: 0 0 0 3px var(--alerte-clair);
+}
+
+.revo-candidats {
+  border: 1px solid var(--ligne);
+  border-radius: 12px;
+}
+
+.revo-candidats .portail-ligne {
+  padding: 10px 12px;
+}
+
+.revo-candidats .btn-danger {
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+.revo-titre {
+  font-size: 16px;
+}
+
+.revo-grille {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.revo-carte {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px;
+}
+
+.revo-carte-haut {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.revo-carte-haut a:hover {
+  text-decoration: underline;
+}
+
+.revo-motif {
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--bg);
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.revo-motif strong {
+  color: var(--text);
+}
+
+.revo-etapes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 12px;
+  font-size: 12.5px;
+}
+
+.revo-etapes li {
+  display: flex;
+  gap: 6px;
+}
+
+.revo-etapes svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--succes);
+}
+
+.revo-pied {
+  padding-top: 10px;
+  border-top: 1px solid var(--ligne);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+@media (max-width: 960px) {
+  .revo-grille,
+  .revo-etapes {
+    grid-template-columns: 1fr;
+  }
+
+  .revo-rapide {
+    flex-direction: column;
+  }
+
+  .revo-candidats .portail-ligne {
+    flex-wrap: wrap;
+  }
+}
