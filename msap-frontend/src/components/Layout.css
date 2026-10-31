@@ -1,0 +1,21 @@
+.cadre {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.cadre-droite {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cadre-contenu {
+  flex: 1;
+}
+
+@media (max-width: 960px) {
+  .cadre {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,13 @@
+.avatar-agent {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 50%;
+  font-weight: 600;
+  color: #fff;
+}
+
+.avatar-agent.revoque {
+  filter: grayscale(1);
+  opacity: 0.55;
+}

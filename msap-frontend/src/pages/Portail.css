@@ -1,0 +1,429 @@
+.portail {
+  padding: 32px;
+}
+
+.portail-contenu {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.portail-entete {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.portail-entete h1 {
+  margin-top: 6px;
+  font-size: 26px;
+  letter-spacing: -0.02em;
+}
+
+.portail-sous {
+  margin-top: 4px;
+  max-width: 640px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.portail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.portail-erreur,
+.portail-succes {
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.portail-erreur {
+  border: 1px solid rgba(184, 50, 50, 0.25);
+  background: var(--alerte-clair);
+  color: var(--alerte);
+}
+
+.portail-succes {
+  border: 1px solid rgba(31, 138, 91, 0.25);
+  background: var(--succes-clair);
+  color: var(--succes);
+}
+
+.portail-vide {
+  padding: 32px 16px;
+  font-size: 14px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.portail-carte {
+  background: var(--card);
+  border: 1px solid var(--ligne);
+  border-radius: 14px;
+  box-shadow: var(--ombre);
+}
+
+.portail-carte-entete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--ligne);
+}
+
+.portail-carte-entete h2 {
+  font-size: 15px;
+}
+
+.portail-carte-entete p {
+  margin-top: 2px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.portail-carte-entete a {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bleu);
+}
+
+.portail-carte-corps {
+  padding: 20px;
+}
+
+.portail-filtres {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 240px 220px;
+  gap: 8px;
+}
+
+.portail-recherche {
+  position: relative;
+}
+
+.portail-recherche svg {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: var(--muted);
+}
+
+.portail-recherche input,
+.portail-filtres select {
+  width: 100%;
+  height: 42px;
+  padding: 0 12px;
+  background: var(--card);
+  border: 1px solid var(--ligne);
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.portail-recherche input {
+  padding-left: 38px;
+}
+
+.portail-recherche input:focus,
+.portail-filtres select:focus {
+  border-color: var(--bleu);
+  box-shadow: 0 0 0 3px var(--bleu-clair);
+}
+
+.portail-tableau {
+  overflow-x: auto;
+}
+
+.portail-tableau table {
+  width: 100%;
+  min-width: 860px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.portail-tableau th {
+  padding: 12px 16px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--ligne);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.portail-tableau td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--ligne);
+  vertical-align: middle;
+}
+
+.portail-tableau tr:last-child td {
+  border-bottom: none;
+}
+
+.portail-tableau tbody tr:hover {
+  background: var(--bg);
+}
+
+.portail-tableau tr.revoque {
+  background: rgba(248, 229, 227, 0.35);
+}
+
+.portail-tri {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.portail-personne {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.portail-personne-texte {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.portail-personne-texte a,
+.portail-personne-texte strong {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.portail-personne-texte a:hover {
+  text-decoration: underline;
+}
+
+.portail-personne-texte span {
+  overflow: hidden;
+  font-size: 12.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--muted);
+}
+
+.portail-discret {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.portail-liste {
+  display: flex;
+  flex-direction: column;
+}
+
+.portail-ligne {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--ligne);
+}
+
+.portail-ligne:last-child {
+  border-bottom: none;
+}
+
+.portail-ligne-texte {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.portail-ligne-texte strong,
+.portail-ligne-texte a {
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.portail-ligne-texte span {
+  overflow: hidden;
+  font-size: 12.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--muted);
+}
+
+.portail-action {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.portail-action:hover {
+  background: var(--alerte-clair);
+  color: var(--alerte);
+}
+
+.badge-statut {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--bg-alt);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--muted);
+}
+
+.badge-statut::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.badge-statut.valide {
+  background: var(--succes-clair);
+  color: var(--succes);
+}
+
+.badge-statut.attente {
+  background: var(--bleu-clair);
+  color: var(--bleu);
+}
+
+.badge-statut.suspendu {
+  background: var(--restreint-clair);
+  color: var(--restreint);
+}
+
+.badge-statut.refuse {
+  background: var(--alerte-clair);
+  color: var(--alerte);
+}
+
+.badge-role {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--bg-alt);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.badge-niveau {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.badge-niveau.standard {
+  background: var(--bleu-clair);
+  color: var(--bleu);
+}
+
+.badge-niveau.restreint {
+  background: var(--restreint-clair);
+  color: var(--restreint);
+}
+
+.badge-niveau.confidentiel {
+  background: var(--alerte-clair);
+  color: var(--alerte);
+}
+
+.portail-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-top: 1px solid var(--ligne);
+  background: var(--bg);
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.portail-pagination div {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.portail-pagination button {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.portail-pagination button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.portail-cartes-mobile {
+  display: none;
+}
+
+@media (max-width: 960px) {
+  .portail {
+    padding: 20px 16px;
+  }
+
+  .portail-filtres {
+    grid-template-columns: 1fr;
+  }
+
+  .portail-tableau.repliable {
+    display: none;
+  }
+
+  .portail-cartes-mobile {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.portail-tableau td.mono {
+  white-space: nowrap;
+}
