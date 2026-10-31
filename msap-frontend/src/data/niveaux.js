@@ -7,6 +7,7 @@ export const niveaux = [
     court: "STD",
     icone: ShieldCheck,
     desc: "Communication administrative ordinaire entre agents habilités.",
+    regles: ["Chiffrement de bout en bout", "Transfert autorisé entre agents enrôlés"],
   },
   {
     id: "restreint",
@@ -14,6 +15,7 @@ export const niveaux = [
     court: "DR",
     icone: ShieldAlert,
     desc: "Information destinée à un groupe limité de personnes autorisées.",
+    regles: ["Transfert interdit", "Expiration après 30 jours", "Filigrane nominatif sur les fichiers"],
   },
   {
     id: "confidentiel",
@@ -21,6 +23,7 @@ export const niveaux = [
     court: "CONF",
     icone: Lock,
     desc: "Information sensible soumise à des restrictions renforcées.",
+    regles: ["Destinataires nominatifs", "Copie et transfert interdits", "Expiration courte et accusé de lecture"],
   },
 ];
 

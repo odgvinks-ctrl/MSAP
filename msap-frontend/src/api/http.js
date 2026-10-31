@@ -7,7 +7,7 @@ export const modeDemo = !racine;
 
 export function lireJeton() {
   try {
-    return localStorage.getItem(CLE_JETON);
+    return sessionStorage.getItem(CLE_JETON);
   } catch {
     return null;
   }
@@ -16,9 +16,9 @@ export function lireJeton() {
 export function ecrireJeton(jeton) {
   try {
     if (jeton) {
-      localStorage.setItem(CLE_JETON, jeton);
+      sessionStorage.setItem(CLE_JETON, jeton);
     } else {
-      localStorage.removeItem(CLE_JETON);
+      sessionStorage.removeItem(CLE_JETON);
     }
   } catch {
     return;

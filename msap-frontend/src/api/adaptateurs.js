@@ -89,3 +89,92 @@ export function regleVersApi(r) {
     filigrane: r.filigrane,
   };
 }
+
+export function contactDepuisApi(a) {
+  return {
+    id: String(a.id),
+    prenom: a.prenom,
+    nom: a.nom,
+    nomComplet: `${a.prenom} ${a.nom}`,
+    email: a.email,
+    telephone: a.telephone || "",
+    fonction: a.fonction,
+    ministereId: a.ministere_id,
+    directionId: a.direction_id,
+    statut: a.statut,
+    presence: a.presence || "hors_ligne",
+  };
+}
+
+export function messageDepuisApi(m) {
+  return {
+    id: String(m.id),
+    conversationId: m.conversation_id,
+    auteurId: m.auteur_id,
+    texte: m.texte || "",
+    date: m.envoye_le,
+    classification: m.classification || "standard",
+    expireLe: m.expire_le,
+    expire: Boolean(m.expire),
+    autorise: m.autorise !== false,
+    restrictions: m.restrictions
+      ? {
+          destinataires: m.restrictions.destinataires || [],
+          transfertInterdit: m.restrictions.transfert_interdit,
+          copieInterdite: m.restrictions.copie_interdite,
+          lectureUnique: m.restrictions.lecture_unique,
+          accuseObligatoire: m.restrictions.accuse_obligatoire,
+          dureeMinutes: m.restrictions.duree_minutes,
+        }
+      : null,
+    repondA: m.repond_a,
+    reactions: m.reactions || [],
+    piece: m.piece,
+    vocal: m.vocal,
+    lu: m.lu,
+    systeme: m.systeme,
+    accuses: m.accuses || [],
+  };
+}
+
+export function conversationDepuisApi(c) {
+  return {
+    id: c.id,
+    type: c.type,
+    titre: c.titre || "",
+    description: c.description || "",
+    categorie: c.categorie,
+    classification: c.classification,
+    membres: c.membres.map((m) => ({ agentId: m.agent_id, role: m.role })),
+    nonLus: c.non_lus || 0,
+    epingle: Boolean(c.epingle),
+    creeLe: c.cree_le,
+    dernier: c.dernier ? messageDepuisApi(c.dernier) : null,
+  };
+}
+
+export function restrictionsVersApi(r) {
+  if (!r) return null;
+  return {
+    destinataires: r.destinataires,
+    transfert_interdit: r.transfertInterdit,
+    copie_interdite: r.copieInterdite,
+    lecture_unique: r.lectureUnique,
+    accuse_obligatoire: r.accuseObligatoire,
+    duree_minutes: r.dureeMinutes,
+  };
+}
+
+export function appareilDepuisApi(d) {
+  return {
+    id: d.id,
+    nom: d.nom,
+    type: d.type,
+    navigateur: d.navigateur,
+    lieu: d.lieu,
+    ip: d.ip,
+    derniereActivite: d.derniere_activite,
+    verifie: d.verifie,
+    courant: Boolean(d.courant),
+  };
+}
