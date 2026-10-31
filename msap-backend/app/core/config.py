@@ -1,4 +1,4 @@
-﻿from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -12,6 +12,11 @@ class Settings(BaseSettings):
     db_password: str
     db_host: str = "localhost"
     db_port: int = 5433
+
+    # Keycloak / OpenID Connect
+    keycloak_issuer: str = "http://localhost:8080/realms/MSAP"
+    keycloak_audience: str = "msap-api"
+    keycloak_jwks_url: str = "http://localhost:8080/realms/MSAP/protocol/openid-connect/certs"
 
     model_config = SettingsConfigDict(
         env_file=".env",

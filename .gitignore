@@ -1,0 +1,29 @@
+﻿# Variables d'environnement et secrets
+.env
+.env.*
+!.env.example
+
+# Fichiers de sauvegarde
+*.backup
+*.backup-*
+*.backup*
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node.js
+node_modules/
+dist/
+dist-ssr/
+
+# Journaux
+*.log
+
+# Éditeurs
+.idea/
+.vscode/
