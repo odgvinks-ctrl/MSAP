@@ -1,16 +1,41 @@
-# React + Vite
+# MSAP · Portail d'administration
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend du portail d'administration de MSAP (Messagerie Souveraine de l'Administration Publique). La messagerie des agents est Element Web, habillé par `../element/config.json`.
 
-Currently, two official plugins are available:
+## Lancer le projet
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```bash
+npm install
+npm run dev
+```
 
-## React Compiler
+Sans fichier `.env`, le portail fonctionne en **mode démonstration** : les données viennent de `src/api/base.js` et sont gardées dans le navigateur. Pour le brancher sur l'API d'administration, créer `.env` :
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+VITE_API_URL=http://localhost:8000
+```
 
-## Expanding the ESLint configuration
+## Comptes de démonstration (fictifs)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Mot de passe `msap2026`, code de second facteur `123456`.
+
+| Compte | Adresse | Résultat |
+| --- | --- | --- |
+| Super administrateur | i.sawadogo@mtd.msap.demo | accès complet |
+| Administratrice ministérielle | f.sankara@men.msap.demo | limitée au MEN |
+| Agent sans droits | a.ouedraogo@mtd.msap.demo | refusé |
+| Compte révoqué | a.barry@mae.msap.demo | refusé |
+| Intrus non enrôlé | invite.externe@gmail.com | refusé et journalisé |
+
+## Technologies et licences
+
+| Technologie | Licence | Projet |
+| --- | --- | --- |
+| React 19 | MIT | https://react.dev |
+| React Router 7 | MIT | https://reactrouter.com |
+| Vite 8 | MIT | https://vite.dev |
+| Lucide React | ISC | https://lucide.dev |
+| Recharts 3 | MIT | https://recharts.org |
+| Inter, JetBrains Mono (Fontsource) | OFL-1.1 | https://fontsource.org |
+
+Code publié sous licence AGPL-3.0 (fichier `LICENSE` à la racine du dépôt).

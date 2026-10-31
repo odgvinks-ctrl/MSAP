@@ -1,0 +1,26 @@
+{
+  "brand": "MSAP",
+  "default_server_config": {
+    "m.homeserver": {
+      "base_url": "https://msap.local",
+      "server_name": "msap.local"
+    }
+  },
+  "disable_custom_urls": true,
+  "disable_guests": true,
+  "disable_3pid_login": true,
+  "default_country_code": "BF",
+  "setting_defaults": {
+    "language": "fr",
+    "UIFeature.registration": false,
+    "UIFeature.passwordReset": false,
+    "UIFeature.deactivate": false
+  },
+  "branding": {
+    "auth_header_logo_url": "themes/logo-msap.svg",
+    "auth_footer_links": [{ "text": "MSAP · Messagerie Souveraine de l'Administration Publique", "url": "https://msap.local" }]
+  },
+  "default_theme": "light",
+  "show_labs_settings": false,
+  "room_directory": { "servers": ["msap.local"] }
+}
