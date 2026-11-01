@@ -1,10 +1,12 @@
-import { appelDemo } from "./base.js";
+﻿import { appelDemo } from "./base.js";
+import { obtenirJetonValide } from "../services/keycloak.js";
 
 const racine = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
 const CLE_JETON = "msap-jeton";
 
 export const modeDemo = !racine;
 
+// Ces fonctions sont conservées uniquement pour le mode démonstration.
 export function lireJeton() {
   try {
     return sessionStorage.getItem(CLE_JETON);
@@ -27,38 +29,66 @@ export function ecrireJeton(jeton) {
 
 function messageErreur(statut, corps) {
   const detail = corps && (corps.detail || corps.message);
+
   if (typeof detail === "string") return detail;
   if (statut === 401) return "Votre session a expiré. Reconnectez-vous.";
   if (statut === 403) return "Vous n'avez pas les droits pour cette action.";
   if (statut === 404) return "Élément introuvable.";
-  if (statut >= 500) return "Le serveur a rencontré une erreur. Réessayez dans un instant.";
+  if (statut >= 500) {
+    return "Le serveur a rencontré une erreur. Réessayez dans un instant.";
+  }
+
   return "Une erreur est survenue.";
 }
 
 function sessionExpiree(statut, auth, jeton) {
   if (statut === 401 && auth && jeton) {
-    ecrireJeton(null);
+    if (modeDemo) ecrireJeton(null);
     window.dispatchEvent(new Event("msap-session-expiree"));
   }
 }
 
-export async function requete(chemin, { methode = "GET", corps, auth = true } = {}) {
-  const jeton = lireJeton();
-
+export async function requete(
+  chemin,
+  { methode = "GET", corps, auth = true } = {}
+) {
   if (modeDemo) {
+    const jeton = lireJeton();
+
     try {
-      return await appelDemo(chemin, { methode, corps, jeton: auth ? jeton : null });
+      return await appelDemo(chemin, {
+        methode,
+        corps,
+        jeton: auth ? jeton : null,
+      });
     } catch (err) {
       sessionExpiree(err.statut, auth, jeton);
       throw err;
     }
   }
 
+  let jeton = null;
+
+  if (auth) {
+    jeton = await obtenirJetonValide();
+
+    if (!jeton) {
+      throw new Error("Session MSAP absente. Veuillez vous connecter.");
+    }
+  }
+
   const entetes = {};
-  if (corps !== undefined) entetes["Content-Type"] = "application/json";
-  if (auth && jeton) entetes.Authorization = `Bearer ${jeton}`;
+
+  if (corps !== undefined) {
+    entetes["Content-Type"] = "application/json";
+  }
+
+  if (auth && jeton) {
+    entetes.Authorization = `Bearer ${jeton}`;
+  }
 
   let reponse;
+
   try {
     reponse = await fetch(racine + chemin, {
       method: methode,
@@ -66,7 +96,9 @@ export async function requete(chemin, { methode = "GET", corps, auth = true } = 
       body: corps !== undefined ? JSON.stringify(corps) : undefined,
     });
   } catch {
-    throw new Error("Impossible de joindre le serveur. Vérifiez votre connexion.");
+    throw new Error(
+      "Impossible de joindre le serveur. Vérifiez votre connexion."
+    );
   }
 
   if (reponse.status === 204) return null;
@@ -77,5 +109,6 @@ export async function requete(chemin, { methode = "GET", corps, auth = true } = 
     sessionExpiree(reponse.status, auth, jeton);
     throw new Error(messageErreur(reponse.status, donnees));
   }
+
   return donnees;
 }

@@ -1,5 +1,13 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { chargerMoi, deconnecter, sessionActive } from "../api/auth.js";
+import { modeDemo } from "../api/http.js";
+import {
+  initialiserKeycloak,
+  sessionKeycloakActive,
+  obtenirJetonValide,
+  connecterKeycloak,
+  deconnecterKeycloak,
+} from "../services/keycloak.js";
 
 const AuthContext = createContext(null);
 const CLE = "msap-admin";
@@ -26,56 +34,120 @@ function stocker(utilisateur) {
 }
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(lireUtilisateur);
-  const id = user?.id;
+  const [user, setUser] = useState(() =>
+    modeDemo ? lireUtilisateur() : null
+  );
+  const [loading, setLoading] = useState(!modeDemo);
 
   useEffect(() => {
-    if (!id) return;
+    let actif = true;
 
     function appliquer(compte) {
-      if (!compte) {
-        setUser(null);
-        stocker(null);
-        return;
+      if (!actif) return;
+
+      setUser(compte || null);
+
+      if (modeDemo) {
+        stocker(compte || null);
       }
-      setUser((actuel) => {
-        if (actuel && JSON.stringify(actuel) === JSON.stringify(compte)) return actuel;
-        stocker(compte);
-        return compte;
-      });
     }
 
-    const actualiser = () => chargerMoi().then(appliquer, () => {});
-    const expirer = () => {
+    async function actualiser() {
       try {
-        sessionStorage.setItem("msap-session-fermee", "1");
+        if (!modeDemo) {
+          const jeton = await obtenirJetonValide();
+
+          if (!jeton) {
+            appliquer(null);
+            return;
+          }
+        }
+
+        const compte = await chargerMoi();
+        appliquer(compte);
       } catch {
-        return appliquer(null);
+        if (!modeDemo) appliquer(null);
       }
+    }
+
+    if (modeDemo) {
+      if (sessionActive()) actualiser();
+    } else {
+      initialiserKeycloak()
+        .then(async () => {
+          if (!actif) return;
+
+          if (sessionKeycloakActive()) {
+            await actualiser();
+          } else {
+            appliquer(null);
+          }
+        })
+        .catch(() => {
+          appliquer(null);
+        })
+        .finally(() => {
+          if (actif) setLoading(false);
+        });
+    }
+
+    function expirer() {
       appliquer(null);
-    };
-    actualiser();
-    window.addEventListener("focus", actualiser);
+
+      if (modeDemo) {
+        try {
+          sessionStorage.setItem("msap-session-fermee", "1");
+        } catch {
+          return;
+        }
+      }
+    }
+
+    function auFocus() {
+      if (modeDemo ? sessionActive() : sessionKeycloakActive()) {
+        actualiser();
+      }
+    }
+
+    window.addEventListener("focus", auFocus);
     window.addEventListener("msap-session-expiree", expirer);
+
     return () => {
-      window.removeEventListener("focus", actualiser);
+      actif = false;
+      window.removeEventListener("focus", auFocus);
       window.removeEventListener("msap-session-expiree", expirer);
     };
-  }, [id]);
+  }, []);
 
   function enregistrer(utilisateur) {
     setUser(utilisateur);
-    stocker(utilisateur);
+
+    if (modeDemo) {
+      stocker(utilisateur);
+    }
+  }
+
+  function login() {
+    if (!modeDemo) {
+      return connecterKeycloak();
+    }
   }
 
   function logout() {
-    deconnecter();
     setUser(null);
-    stocker(null);
+
+    if (modeDemo) {
+      deconnecter();
+      stocker(null);
+    } else {
+      return deconnecterKeycloak();
+    }
   }
 
   return (
-    <AuthContext.Provider value={{ user, enregistrer, logout }}>
+    <AuthContext.Provider
+      value={{ user, loading, enregistrer, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

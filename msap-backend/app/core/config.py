@@ -1,4 +1,4 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict
+﻿from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -17,6 +17,11 @@ class Settings(BaseSettings):
     keycloak_issuer: str = "http://localhost:8080/realms/MSAP"
     keycloak_audience: str = "msap-api"
     keycloak_jwks_url: str = "http://localhost:8080/realms/MSAP/protocol/openid-connect/certs"
+
+    # Keycloak Admin API - compte de service
+    keycloak_admin_client_id: str
+    keycloak_admin_client_secret: str
+    keycloak_admin_base_url: str = "http://localhost:8080/admin/realms/MSAP"
 
     model_config = SettingsConfigDict(
         env_file=".env",
