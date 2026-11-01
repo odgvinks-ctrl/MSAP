@@ -83,7 +83,8 @@ def consulter_agent(
         action="consultation_agent",
         resultat="succes",
         auteur_id=administrateur.id,
-        cible_id=str(agent_id),
+        cible_id=str(agent.id),
+        details={"email": agent.email, "role": agent.role},
         ip=obtenir_ip_client(request),
     )
 
