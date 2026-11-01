@@ -1,0 +1,44 @@
+server_name: "msap.local"
+public_baseurl: "http://localhost:8008/"
+pid_file: /data/homeserver.pid
+signing_key_path: /data/msap.local.signing.key
+media_store_path: /data/media_store
+log_config: /config/log.config
+report_stats: false
+
+listeners:
+  - port: 8008
+    type: http
+    tls: false
+    bind_addresses: ["0.0.0.0"]
+    x_forwarded: true
+    resources:
+      - names: [client]
+        compress: false
+
+enable_registration: false
+allow_guest_access: false
+enable_3pid_lookup: false
+require_auth_for_profile_requests: true
+limit_profile_requests_to_users_who_share_rooms: true
+include_profile_data_on_invite: false
+
+federation_domain_whitelist: []
+trusted_key_servers: []
+suppress_key_server_warning: true
+allow_public_rooms_over_federation: false
+allow_public_rooms_without_auth: false
+
+encryption_enabled_by_default_for_room_type: all
+url_preview_enabled: false
+
+user_directory:
+  enabled: true
+  search_all_users: true
+
+retention:
+  enabled: true
+  default_policy:
+    max_lifetime: 365d
+
+max_upload_size: 50M
