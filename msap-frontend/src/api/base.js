@@ -340,8 +340,8 @@ export async function appelDemo(chemin, { methode = "GET", corps, jeton } = {}) 
     }
 
     const agent = trouverAgent(base, id);
-    if (!action && methode === "GET") return avecSalons(base, agent);
     verifierPortee(admin, agent);
+    if (!action && methode === "GET") return avecSalons(base, agent);
 
     if (!action && methode === "PATCH") {
       const ancienRole = agent.role;
